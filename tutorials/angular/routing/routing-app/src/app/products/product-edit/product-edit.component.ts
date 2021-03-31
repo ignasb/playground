@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { MessageService } from '../../messages/message.service';
 
-import { Product } from '../product';
+import { Product, ProductResolved } from '../product';
 import { ProductService } from '../product.service';
 
 @Component({
@@ -25,10 +25,12 @@ export class ProductEditComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      console.log('whatafaka');
-      const id = +params.get('id');
-      this.getProduct(id);
+    this.route.data.subscribe((data: Observable<ProductResolved>) => {
+      const resolvedData: ProductResolved = this.route.snapshot.data[
+        'resolvedData'
+      ];
+      this.errorMessage = resolvedData.error;
+      this.onProductRetrieved(resolvedData.product);
     });
   }
 
