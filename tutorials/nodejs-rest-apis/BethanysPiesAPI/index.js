@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 const pieRepo = require("./repos/pieRepo");
+const errorHelper = require("./helpers/errorHelpers");
 
 // Use the express Router object
 const router = express.Router();
@@ -150,6 +151,18 @@ router.delete("/:id", (req, res, next) => {
 
 // Configure router so all routes are prefixed with /api/
 app.use("/api/", router);
+
+// Configure exception logger to console
+app.use(errorHelper.logErrorsToConsole);
+
+// Configure exception logger to file
+app.use(errorHelper.logErrorsToFile);
+
+// Configure client error handler
+app.use(errorHelper.clientErrorHandler);
+
+// Configure catch-all exception middleware last
+app.use(errorHelper.errorHandler);
 
 // Create a server to listen on port 5000
 const server = app.listen(5000, () => {
