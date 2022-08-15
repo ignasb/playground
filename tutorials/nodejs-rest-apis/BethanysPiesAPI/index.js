@@ -3,9 +3,12 @@ const express = require("express");
 const app = express();
 const pieRepo = require("./repos/pieRepo");
 const errorHelper = require("./helpers/errorHelpers");
+const cors = require("cors");
 
 // Use the express Router object
 const router = express.Router();
+
+app.use(cors());
 
 // Configure middleware to support JSON data parsing in request object
 app.use(express.json());
